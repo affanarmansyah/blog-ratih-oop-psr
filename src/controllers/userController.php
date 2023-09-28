@@ -8,24 +8,19 @@ use src\models\UserModel;
 
 class UserController extends DefaultController
 {
-    public function pageLogin($login)
+    public function login()
     {
-        $userModel = new UserModel;
-        $login = $userModel->login("", "");
-
-        if (isset($login['email']) && isset($login['password'])) {
+        if (isset($_POST['email']) && isset($_POST['password'])) {
             // panggil class model user
             $userModel = new UserModel;
 
-            $email = $login['email'];
-            $password = md5($login['password']);
+            $email = $_POST['email'];
+            $password = md5($_POST['password']);
 
             if (empty($email)) {
-                header("Location: ../src/views/users/index.php?error=Email is required");
-                exit();
+                $this->redirect("user/login", ["error" => "Email is required"]);
             } else if (empty($password)) {
-                header("Location: ../src/views/users/index.php?error=Password is required");
-                exit();
+                $this->redirect("user/login", ["error" => "Password is required"]);
             } else {
                 $login = $userModel->login($email, $password);
 
@@ -45,23 +40,19 @@ class UserController extends DefaultController
                         } else {
                             echo "name: " . $row['name'];
                         }
-                        header("location: ../dashboard.php");
-                        exit();
+
+                        $this->redirect("news/index");
                     }
                 } else {
-                    header("location: ../src/views/users/index.php?error=Email atau password anda salah, coba kembali.");
-                    exit();
+                    $this->redirect("user/login", ["error" => "Email atau password anda salah, coba kembali"]);
                 }
             }
-        } else {
-            header("Location: ../src/views/users/index.php");
-            exit();
         }
+
         return $this->render(
-            'index',
+            'login',
             [
-                "success" => $login['success'],
-                "row" => $login['row'],
+                'err' => "sdfsdf"
             ]
         );
     }

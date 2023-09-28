@@ -30,7 +30,7 @@
                     <p class="error" style="background: #f2dede; color: #A94442; padding: 8px; width: 100%; border-radius: 5px; font-size: 13px;"><?php echo $_GET['error']; ?></p>
                 <?php } ?>
 
-                <form method="post" id="quickForm">
+                <form method="post" id="login-form">
                     <div class="card-bodsy">
                         <div class="form-group">
                             <input type="text" name="email" class="form-control" id="exampleInputEmail1" placeholder="Email">
@@ -48,11 +48,10 @@
                         <a href="../user/create-account.php" class="text-center mt-1">Register member baru</a>
                     </div>
                     <!-- /.col -->
+                </form>
             </div>
-            </form>
+            <!-- /.login-card-body -->
         </div>
-        <!-- /.login-card-body -->
-    </div>
     </div>
     <!-- /.login-box -->
 

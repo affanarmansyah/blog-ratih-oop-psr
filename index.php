@@ -7,20 +7,31 @@ require_once __DIR__ . '/vendor/autoload.php';
 
 $requestUrls = explode('/', $_SERVER['REQUEST_URI']);
 
-if ($requestUrls === '/') {
+if ($requestUrls[2] === '') {
+    header("Location: ./users/login");
 } elseif ($requestUrls[2] === 'users') {
     $userController = new UserController;
-    if ($requestUrls[3] === 'index') {
-        echo $userController->pageLogin($_POST);
+
+    $actionExplode = explode('?', $requestUrls[3]);
+    if ($actionExplode[0] === 'login') {
+        echo $userController->login();
     }
 } elseif ($requestUrls[2] === 'news') {
     $newsController = new NewsController;
-    if ($requestUrls[3] === 'index') {
+    $actionExplode = explode('?', $requestUrls[3]);
+    if ($actionExplode[0] === 'index') {
         echo $newsController->index();
-    } elseif ($requestUrls[3] === 'create') {
+    } elseif ($actionExplode[0] === 'create') {
         echo $newsController->create();
     }
 } else {
     http_response_code(404);
+
     echo "Halaman tidak ditemukan";
+}
+
+function explodeUrl($string, $delimeter, $index)
+{
+    $value = explode($delimeter, $string);
+    return $value[$index];
 }
