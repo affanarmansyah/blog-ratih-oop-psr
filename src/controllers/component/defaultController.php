@@ -7,6 +7,11 @@ class DefaultController
 {
     public $baseUrl;
     public $baseDir;
+    public $template;
+
+    public function __construct()
+    {
+    }
 
     function render($filename, $vars = null)
     {
@@ -20,8 +25,22 @@ class DefaultController
             extract([$baseUrl]);
         }
 
+        $this->baseUrl = $baseUrl;
+
         ob_start();
         include 'src/views/' . $requestUrls[2] . '/' . $filename . '.php';
+
+        if (isset($this->template)) {
+            $content = ob_get_clean();
+
+            ob_start();
+
+            extract([$content]);
+            // include 'src/views/' . $requestUrls[2] . '/' . $filename . '.php';
+            include 'src/views/templates/'  . $this->template . '.php'; // src/views/templates/news/news-template.php
+        }
+
+
         return ob_get_clean();
     }
 
@@ -56,10 +75,10 @@ class DefaultController
 
     public function menu()
     {
-        $profileImage = '../assets/img/default-profile.png';
-        print_r("tes");
+        $requestUrls = explode('/', $_SERVER['REQUEST_URI']);
+        $baseUrl = "/$requestUrls[1]";
 
-        print_r($this->baseUrl);
+        $profileImage = $baseUrl . '/assets/img/default-profile.png';
         $name = '';
         if (isset($_SESSION['email']) && isset($_SESSION['name'])) {
             if (isset($_SESSION['photo']) && !empty($_SESSION['photo'])) {

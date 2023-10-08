@@ -10,6 +10,13 @@ session_start();
 
 class NewsController extends DefaultController
 {
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->template = "news/news-template";
+    }
+
     public function index()
     {
         $page = isset($_GET['page']) ? $_GET['page'] : 1;
@@ -37,7 +44,6 @@ class NewsController extends DefaultController
                 'page' => $page,
                 'limit' => $limit,
                 'search' => $search,
-                'news' => $this->menu(),
             ]
         );
     }
@@ -65,7 +71,6 @@ class NewsController extends DefaultController
             'create',
             [
                 'rows' => $listcategory['rows'],
-                'news' => $this->menu(),
 
             ]
         );
@@ -97,8 +102,6 @@ class NewsController extends DefaultController
             [
                 'categories' => $categoryModel->getCategoryRows(),
                 'result' => $result,
-                'news' => $this->menu(),
-
             ]
         );
     }
@@ -114,8 +117,6 @@ class NewsController extends DefaultController
             'detail',
             [
                 'detail' => $detail,
-                'news' => $this->menu(),
-
             ]
         );
     }
