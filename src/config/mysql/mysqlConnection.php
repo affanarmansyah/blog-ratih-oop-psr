@@ -13,6 +13,7 @@ class MysqlConnection
     // public function untuk kegunaan global dimana saja
     public $connection;
 
+
     public function __construct()
     {
         // call function databaseConnection

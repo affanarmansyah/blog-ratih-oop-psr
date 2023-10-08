@@ -4,25 +4,24 @@ namespace src\controllers; // Ubah namespace menjadi src\controllers
 
 use src\controllers\component\DefaultController;
 use src\models\CategoryModel;
-use src\models\NewsModel;
 
 session_start();
 
-class NewsController extends DefaultController
+class CategoryController extends DefaultController
 {
     public function index()
     {
         $page = isset($_GET['page']) ? $_GET['page'] : 1;
         $search = isset($_GET['cari_disini']) ? $_GET['cari_disini'] : '';
-        $limit = isset($_GET['limit']) ? $_GET['limit'] : 10;
+        $limit = isset($_GET['limit']) ? $_GET['limit'] : 5;
 
-        $newsModel = new NewsModel;
-        $listNews = $newsModel->listNews($page, $search, $limit);
+        $categoryModel = new CategoryModel;
+        $listcategory = $categoryModel->listCategory($page, $search, $limit);
 
         if (isset($_GET['id'])) {
-            $berhasil = $newsModel->deleteNews($_GET['id']);
+            $berhasil = $categoryModel->deleteCategory($_GET['id']);
             if ($berhasil) {
-                $this->redirect("news/index", ["berhasil" => "<b>Well done!</b> News Deleted"]);
+                $this->redirect("category/index", ["berhasil" => "<b>Well done!</b> Category Deleted"]);
                 exit();
             } else {
                 echo $berhasil;
@@ -32,28 +31,27 @@ class NewsController extends DefaultController
         return $this->render(
             'index',
             [
-                'totalPages' => $listNews['totalPages'],
-                'rows' => $listNews['rows'],
+                'totalPages' => $listcategory['totalPages'],
+                'rows' => $listcategory['rows'],
                 'page' => $page,
                 'limit' => $limit,
                 'search' => $search,
                 'news' => $this->menu(),
+
             ]
         );
     }
 
     public function create()
     {
-        $newsModel = new NewsModel;
         $categoryModel = new CategoryModel;
-        $listcategory = $categoryModel->listCategory(1, "", 10);
-
         // proses addNews
         if (isset($_POST['submit'])) {
-            if ($_POST['submit'] == "Add") {
-                $berhasil = $newsModel->createNews($_POST, $_FILES);
+            if ($_POST['submit'] == "save") {
+                $berhasil = $categoryModel->createCategory($_POST);
                 if ($berhasil) {
-                    $this->redirect("news/index", ["berhasil" => "<b>Well done!</b> News Created"]);
+                    $this->redirect("category/index", ["berhasil" => "<b>Well done!</b> Category Created"]);
+
                     exit();
                 } else {
                     echo $berhasil;
@@ -64,7 +62,22 @@ class NewsController extends DefaultController
         return $this->render(
             'create',
             [
-                'rows' => $listcategory['rows'],
+                'news' => $this->menu(),
+            ]
+        );
+    }
+
+    public function detail()
+    {
+        $id = isset($_GET['id']) ? $_GET['id'] : '';
+
+        $categoryModel = new CategoryModel;
+        $detail = $categoryModel->detailUpdateCategory($id);
+
+        return $this->render(
+            'detail',
+            [
+                'detail' => $detail,
                 'news' => $this->menu(),
 
             ]
@@ -73,18 +86,15 @@ class NewsController extends DefaultController
 
     public function update()
     {
-        $newsModel = new NewsModel;
         $categoryModel = new CategoryModel;
-        $categoryModel->listCategory(1, "", 1000);
+        $result = $categoryModel->detailUpdateCategory(isset($_GET['id']) ? $_GET['id'] : '');
 
-        $result = $newsModel->detailUpdateNews($_GET['id']);
-
-        // proses updateNews
         if (isset($_POST['submit'])) {
             if ($_POST['submit'] == "Update") {
-                $berhasil = $newsModel->updateNews($_POST, $_FILES);
+                $berhasil = $categoryModel->updateCategory($_POST);
                 if ($berhasil) {
-                    $this->redirect("news/index", ["berhasil" => "<b>Well done!</b> News Updated"]);
+                    $this->redirect("category/index", ["berhasil" => "<b>Well done!</b> Category Updated"]);
+
                     exit();
                 } else {
                     echo $berhasil;
@@ -95,25 +105,7 @@ class NewsController extends DefaultController
         return $this->render(
             'update',
             [
-                'categories' => $categoryModel->getCategoryRows(),
                 'result' => $result,
-                'news' => $this->menu(),
-
-            ]
-        );
-    }
-
-    public function detail()
-    {
-        $id = isset($_GET['id']) ? $_GET['id'] : '';
-
-        $newsModel = new NewsModel;
-        $detail = $newsModel->detailUpdateNews($id);
-
-        return $this->render(
-            'detail',
-            [
-                'detail' => $detail,
                 'news' => $this->menu(),
 
             ]

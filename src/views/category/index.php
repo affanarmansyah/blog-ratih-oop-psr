@@ -17,6 +17,7 @@
 <body class="hold-transition sidebar-mini">
     <?= $news ?>
 
+
     <div class="wrapper">
         <!-- Main Sidebar Container -->
 
@@ -26,16 +27,16 @@
                 <div class="container-fluid">
                     <div class="row mb-2">
                         <div class="col-sm-6">
-                            <h1>News</h1>
+                            <h1>Categories</h1>
                         </div>
                         <div class="col-sm-6">
                             <ol class="breadcrumb float-sm-right">
                                 <li class="breadcrumb-item"><a href="<?= $baseUrl ?>/view/dashboard.php">Home</a></li>
-                                <li class="breadcrumb-item active">News</li>
+                                <li class="breadcrumb-item active">Category</li>
                             </ol>
                         </div>
                     </div>
-                    <div class="mt-3"><a href="<?= $baseUrl ?>/news/create" style="background-color: #007bff; padding: 5px;  border: none; color: #fff; border-radius: 5px;">+ &nbsp; Create News</a></div>
+                    <div class="mt-3"><a href="<?= $baseUrl ?>/category/create" style="background-color: #007bff; padding: 5px;  border: none; color: #fff; border-radius: 5px;">+ &nbsp; Create Category</a></div>
                 </div><!-- /.container-fluid -->
             </section>
 
@@ -62,18 +63,14 @@
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th>No.</th>
-                                    <th>Image</th>
-                                    <th>Title</th>
-                                    <th>Status</th>
-                                    <th>Created_at</th>
-                                    <th>Updated_at</th>
+                                    <th>Id</th>
+                                    <th>Name</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php
-                                echo $totalPages == 0 ? '<tr><td colspan="7">Tidak ada data ditemukan</td></tr>' : '';
+                                echo $totalPages == 0 ? '<tr><td colspan="3">Tidak ada data ditemukan</td></tr>' : '';
 
                                 $no = ($page - 1) * $limit + 1;
 
@@ -81,15 +78,11 @@
                                 ?>
                                     <tr>
                                         <td><?php echo $no; ?></td>
-                                        <td><img src="<?= $baseUrl ?>/assets/img/<?php echo $row['image'] != '' ? $row['image'] : 'default-news.png'; ?>" style="width: 50px; height: 50px;"></td>
-                                        <td><?php echo $row['title']; ?></td>
-                                        <td><?php echo $row['status']; ?></td>
-                                        <td><?php echo $row['created_at']; ?></td>
-                                        <td><?php echo $row['updated_at']; ?></td>
+                                        <td><?php echo $row['name']; ?></td>
                                         <td>
-                                            <a style="background-color: #03a9f4; padding: 5px;  border: none; color: #fff; " href="<?= $baseUrl ?>/news/update?id=<?php echo $row['id']; ?>"><i class="fas fa-edit" title="Edit"></i></a>
-                                            <a style="background-color: salmon; padding: 5px;  border: none; color: #fff; " href="<?= $baseUrl ?>/news/index?id=<?php echo $row['id']; ?>" onclick="return confirm('Anda yakin ingin menghapus berita ini?')"><i class="fas fa-trash-alt" title="Delete"></i></a>
-                                            <a style="background-color: cornflowerblue; padding: 5px;  border: none; color: #fff; " href="<?= $baseUrl ?>/news/detail?id=<?php echo $row['id']; ?>"><i class="fas fa-eye" title="View"></i></a>
+                                            <a style="background-color: #03a9f4; padding: 5px;  border: none; color: #fff; " href="<?= $baseUrl ?>/category/update?id=<?php echo $row['id']; ?>"><i class="fas fa-edit" title="Edit"></i></a>
+                                            <a style="background-color: salmon; padding: 5px;  border: none; color: #fff; " href="<?= $baseUrl ?>/category/index?id=<?php echo $row['id']; ?>" onclick="return confirm('Anda yakin ingin menghapus berita ini?')"><i class="fas fa-trash-alt" title="Delete"></i></a>
+                                            <a style="background-color: cornflowerblue; padding: 5px;  border: none; color: #fff; " href="<?= $baseUrl ?>/category/detail?id=<?php echo $row['id']; ?>"><i class="fas fa-eye" title="View"></i></a>
                                         </td>
                                     </tr>
                                 <?php

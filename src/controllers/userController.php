@@ -5,6 +5,7 @@ namespace src\controllers; // Ubah namespace menjadi src\controllers
 use src\controllers\component\DefaultController;
 use src\models\UserModel;
 
+session_start();
 
 class UserController extends DefaultController
 {
@@ -15,13 +16,15 @@ class UserController extends DefaultController
             $userModel = new UserModel;
 
             $email = $_POST['email'];
-            $password = md5($_POST['password']);
+            $password = $_POST['password'];
 
             if (empty($email)) {
-                $this->redirect("user/login", ["error" => "Email is required"]);
+                $this->redirect("users/login", ["error" => "Email is required"]);
             } else if (empty($password)) {
-                $this->redirect("user/login", ["error" => "Password is required"]);
+                $this->redirect("users/login", ["error" => "Password is required"]);
             } else {
+                $password = md5($password);
+
                 $login = $userModel->login($email, $password);
 
                 if ($login['success'] === 1) {
@@ -44,15 +47,122 @@ class UserController extends DefaultController
                         $this->redirect("news/index");
                     }
                 } else {
-                    $this->redirect("user/login", ["error" => "Email atau password anda salah, coba kembali"]);
+                    $this->redirect("users/login", ["error" => "Email atau password anda salah, coba kembali"]);
                 }
             }
         }
 
         return $this->render(
             'login',
+            []
+        );
+    }
+
+    public function register()
+    {
+        $register = new UserModel;
+
+
+        if (isset($_POST['create-user'])) {
+            if ($_POST['create-user'] == "Create") {
+
+                $result = $register->create($_POST);
+            }
+
+            $feedback = $register->getUser();
+            $feedbackErrors = $register->getErrors();
+
+            if ($feedback['success']) {
+                // Jika akun berhasil dibuat, redirect ke halaman create-account.php dengan parameter success.
+                $this->redirect("users/register", ["success" => $feedback['message']]);
+                exit();
+            } else {
+                // Jika terdapat error, redirect ke halaman create-account.php dengan parameter error.
+                $errorData = implode("<br>", $feedbackErrors['errors']);
+                $this->redirect("users/register", ["error" => "$errorData"]);
+                exit();
+            }
+        }
+        return $this->render(
+            'register',
+            []
+        );
+    }
+
+    public function detail()
+    {
+        $detail = new UserModel;
+
+        $id = isset($_GET['id']) ? $_GET['id'] : '';
+        $result = $detail->detailProfile($id);
+
+        return $this->render(
+            'detail',
             [
-                'err' => "sdfsdf"
+                'result' => $result,
+                'news' => $this->menu(),
+
+            ]
+        );
+    }
+
+    public function update()
+    {
+
+        $update = new UserModel;
+
+        if (isset($_POST['submit'])) {
+            if ($_POST['submit'] == "Save") {
+                // untuk update
+                $update->updateProfile($_POST, $_FILES);
+            }
+
+            $feedback = $update->getUser();
+            $feedbackErrors = $update->getErrors();
+
+            if ($feedback['success']) {
+                // update session ketika berhasil update
+                $_SESSION['email'] = $_POST['email'] ? $_POST['email'] : $_SESSION['email'];
+                $_SESSION['name'] = $_POST['name'] ? $_POST['name'] : $_SESSION['name'];
+                $_SESSION['photo'] = $_FILES['photo'] ? $_FILES['photo']['name'] : $_SESSION['photo'];
+                $_SESSION['updated_at'] = $_POST['updated_at'] ? $_POST['updated_at'] : $_SESSION['updated_at'];
+
+                $this->redirect("users/update", ["success" => $feedback['message']]);
+
+                exit();
+            } else {
+                // Jika terdapat error, redirect ke halaman create-account.php dengan parameter error.
+                $errorData = implode("<br>", $feedbackErrors['errors']);
+                $this->redirect("users/update", ["error" => "$errorData"]);
+                exit();
+            }
+        }
+        return $this->render(
+            'update',
+            [
+                'news' => $this->menu(),
+
+            ]
+        );
+    }
+
+    public function logout()
+    {
+        session_start();
+
+        session_unset();
+        session_destroy();
+
+        $this->redirect("users/login");
+    }
+
+    public function profile()
+    {
+        return $this->render(
+            'profile',
+            [
+                'news' => $this->menu(),
+
             ]
         );
     }
