@@ -68,7 +68,6 @@ class UserModel
             $result = mysqli_query($this->mysqlConnection, $query);
 
             if (mysqli_num_rows($result) > 0) {
-                // Email sudah terdaftar.
                 $errors[] = "Email sudah terdaftar";
             }
         }
@@ -86,10 +85,10 @@ class UserModel
         }
 
         if (!empty($errors)) {
-            // Jika terdapat error, kembalikan array yang berisi status 'success' false dan daftar error.
             $this->setErrors([
                 'success' => false,
-                'errors' => $errors
+                'errors' => $errors,
+                'email' => $email,
             ]);
 
             return;
@@ -108,11 +107,11 @@ class UserModel
 
                 return;
             } else {
-                // Gagal membuat akun.
                 $errors[] = "Created Account Gagal";
                 $this->setErrors([
                     'success' => false,
-                    'errors' => $errors
+                    'errors' => $errors,
+                    'email' => $email,
                 ]);
 
                 return;

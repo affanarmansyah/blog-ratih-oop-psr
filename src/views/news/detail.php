@@ -1,7 +1,4 @@
 <div class="wrapper">
-    <!-- Main Sidebar Container -->
-
-    <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
         <!-- Content Header (Page header) -->
         <section class="content-header">
@@ -19,8 +16,6 @@
                 </div>
             </div><!-- /.container-fluid -->
         </section>
-
-        <!-- Main content -->
         <section class="content col-md-4">
             <div class="card">
                 <!-- /.card-header -->
@@ -59,7 +54,6 @@
                             <tr>
                                 <th>Update_at</th>
                                 <td><?php echo $detail['updated_at']; ?></td>
-
                             </tr>
                         </tbody>
                     </table>

@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="<?= $baseUrl ?>/assets/plugin/AdminLTE-3.2.0/plugins/fontawesome-free/css/all.min.css">
     <!-- Theme style -->
     <link rel="stylesheet" href="<?= $baseUrl ?>/assets/plugin/AdminLTE-3.2.0/dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="<?= $baseUrl ?>/assets/css/template.css">
 </head>
 
 <?php

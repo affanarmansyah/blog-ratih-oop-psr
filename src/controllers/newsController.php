@@ -50,6 +50,8 @@ class NewsController extends DefaultController
 
     public function create()
     {
+        $this->template = "news/create-template";
+
         $newsModel = new NewsModel;
         $categoryModel = new CategoryModel;
         $listcategory = $categoryModel->listCategory(1, "", 10);
@@ -78,9 +80,12 @@ class NewsController extends DefaultController
 
     public function update()
     {
+        $this->template = "news/update-template";
+
         $newsModel = new NewsModel;
         $categoryModel = new CategoryModel;
-        $categoryModel->listCategory(1, "", 1000);
+        $listcategory = $categoryModel->listCategory(1, "", 10);
+
 
         $result = $newsModel->detailUpdateNews($_GET['id']);
 
@@ -100,7 +105,7 @@ class NewsController extends DefaultController
         return $this->render(
             'update',
             [
-                'categories' => $categoryModel->getCategoryRows(),
+                'rows' => $listcategory['rows'],
                 'result' => $result,
             ]
         );

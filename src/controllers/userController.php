@@ -9,8 +9,15 @@ session_start();
 
 class UserController extends DefaultController
 {
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->template = "users/user-template";
+    }
     public function login()
     {
+        $this->template = "users/login-template";
         if (isset($_POST['email']) && isset($_POST['password'])) {
             // panggil class model user
             $userModel = new UserModel;
@@ -60,34 +67,34 @@ class UserController extends DefaultController
 
     public function register()
     {
-        $register = new UserModel;
+        $this->template = "users/register-template";
 
+        $register = new UserModel;
 
         if (isset($_POST['create-user'])) {
             if ($_POST['create-user'] == "Create") {
-
-                $result = $register->create($_POST);
+                $register->create($_POST);
             }
 
             $feedback = $register->getUser();
             $feedbackErrors = $register->getErrors();
 
             if ($feedback['success']) {
-                // Jika akun berhasil dibuat, redirect ke halaman create-account.php dengan parameter success.
                 $this->redirect("users/register", ["success" => $feedback['message']]);
                 exit();
             } else {
-                // Jika terdapat error, redirect ke halaman create-account.php dengan parameter error.
                 $errorData = implode("<br>", $feedbackErrors['errors']);
-                $this->redirect("users/register", ["error" => "$errorData"]);
+                $this->redirect("users/register", ["error" => "$errorData", "email" => $feedbackErrors['email']]);
                 exit();
             }
         }
+
         return $this->render(
             'register',
             []
         );
     }
+
 
     public function detail()
     {
@@ -100,14 +107,13 @@ class UserController extends DefaultController
             'detail',
             [
                 'result' => $result,
-                'news' => $this->menu(),
-
             ]
         );
     }
 
     public function update()
     {
+        $this->template = "users/update-template";
 
         $update = new UserModel;
 
@@ -139,10 +145,7 @@ class UserController extends DefaultController
         }
         return $this->render(
             'update',
-            [
-                'news' => $this->menu(),
-
-            ]
+            []
         );
     }
 
@@ -160,10 +163,7 @@ class UserController extends DefaultController
     {
         return $this->render(
             'profile',
-            [
-                'news' => $this->menu(),
-
-            ]
+            []
         );
     }
 }

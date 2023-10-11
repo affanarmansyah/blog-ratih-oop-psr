@@ -38,7 +38,7 @@
     <select id="category" name="category_id" required>
         <?php
 
-        foreach ($categories as $category) {
+        foreach ($rows as $category) {
             $selected = $category['id'] == $result['category_id'] ? 'selected' : "";
             echo '<option value="' . $category['id'] . '" ' . $selected . '>' . $category['name'] . '</option>';
         }

@@ -9,6 +9,12 @@ session_start();
 
 class CategoryController extends DefaultController
 {
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->template = "category/category-template";
+    }
     public function index()
     {
         $page = isset($_GET['page']) ? $_GET['page'] : 1;
@@ -36,14 +42,14 @@ class CategoryController extends DefaultController
                 'page' => $page,
                 'limit' => $limit,
                 'search' => $search,
-                'news' => $this->menu(),
-
             ]
         );
     }
 
     public function create()
     {
+        $this->template = "category/create-template";
+
         $categoryModel = new CategoryModel;
         // proses addNews
         if (isset($_POST['submit'])) {
@@ -61,9 +67,7 @@ class CategoryController extends DefaultController
         }
         return $this->render(
             'create',
-            [
-                'news' => $this->menu(),
-            ]
+            []
         );
     }
 
@@ -78,7 +82,6 @@ class CategoryController extends DefaultController
             'detail',
             [
                 'detail' => $detail,
-                'news' => $this->menu(),
 
             ]
         );
@@ -86,6 +89,8 @@ class CategoryController extends DefaultController
 
     public function update()
     {
+        $this->template = "category/update-template";
+
         $categoryModel = new CategoryModel;
         $result = $categoryModel->detailUpdateCategory(isset($_GET['id']) ? $_GET['id'] : '');
 
@@ -106,7 +111,6 @@ class CategoryController extends DefaultController
             'update',
             [
                 'result' => $result,
-                'news' => $this->menu(),
 
             ]
         );
