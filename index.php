@@ -1,13 +1,8 @@
 <?php
 
-// use src\rest\Rest;
-
-use src\v1\controllers\UserController;
+use src\rest\Rest;
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-$user = new UserController;
-$user->login();
-
-// $restApi = new Rest;
-// $restApi->makeRoute();
+$restApi = new Rest;
+$restApi->makeRoute();

@@ -1,6 +1,6 @@
 <?php
 
-namespace src\v1\controllers; // Ubah namespace menjadi src\controllers
+namespace src\controllers\v1; // Ubah namespace menjadi src\controllers
 
 use src\controllers\component\DefaultController;
 use src\models\CategoryModel;

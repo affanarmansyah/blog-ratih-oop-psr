@@ -3,10 +3,10 @@
 namespace src\rest;
 
 use src\rest\v1\users\UserRoute;
-use src\v1\controllers\NewsController;
-use src\v1\controllers\UserController;
+use src\controllers\v1\NewsController;
+use src\controllers\v1\UserController;
 
-class Routes
+class Route
 {
     public function route(UserController $userController, NewsController $newsController)
     {

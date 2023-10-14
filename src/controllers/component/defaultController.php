@@ -11,6 +11,7 @@ class DefaultController
 
     public function __construct()
     {
+        header('Content-Type: application/json');
     }
 
     function render($filename, $vars = null)

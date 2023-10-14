@@ -2,14 +2,14 @@
 
 namespace src\rest;
 
-use src\v1\controllers\NewsController;
-use src\v1\controllers\UserController;
+use src\controllers\v1\NewsController;
+use src\controllers\v1\UserController;
 
 class Rest
 {
     public function makeRoute()
     {
-        $routes = new Routes;
+        $routes = new Route;
         $routes->route(new UserController, new NewsController);
     }
 }
