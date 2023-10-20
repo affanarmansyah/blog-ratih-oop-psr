@@ -86,7 +86,7 @@
                     <ul class="pagination pagination-sm m-0 float-right">
                         <?php
                         if ($page > 1) {
-                            echo '<li class="page-item"><a class="page-link" href="?page=' . ($page - 1) . '&cari_disini=' . $search . '">&laquo;</a></li>';
+                            echo '<li class="page-item"><a class="page-link" href="?page=' . ($page - 1) . '&cari_disini=' . $keyword . '">&laquo;</a></li>';
                         }
 
                         for ($i = 1; $i <= $totalPages; $i++) {
@@ -94,11 +94,11 @@
                             if ($i == $page) {
                                 echo ' active';
                             }
-                            echo '"><a class="page-link" href="?page=' . $i . '&cari_disini=' . $search . '">' . $i . '</a></li>';
+                            echo '"><a class="page-link" href="?page=' . $i . '&cari_disini=' . $keyword . '">' . $i . '</a></li>';
                         }
 
                         if ($page < $totalPages) {
-                            echo '<li class="page-item"><a class="page-link" href="?page=' . ($page + 1) . '&cari_disini=' . $search . '">&raquo;</a></li>';
+                            echo '<li class="page-item"><a class="page-link" href="?page=' . ($page + 1) . '&cari_disini=' . $keyword . '">&raquo;</a></li>';
                         }
                         ?>
                     </ul>

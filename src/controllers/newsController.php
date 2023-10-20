@@ -20,30 +20,24 @@ class NewsController extends DefaultController
     public function index()
     {
         $page = isset($_GET['page']) ? $_GET['page'] : 1;
-        $search = isset($_GET['cari_disini']) ? $_GET['cari_disini'] : '';
+        $keyword = isset($_GET['cari_disini']) ? $_GET['cari_disini'] : '';
         $limit = isset($_GET['limit']) ? $_GET['limit'] : 10;
 
-        $newsModel = new NewsModel;
-        $listNews = $newsModel->listNews($page, $search, $limit);
+        // api get news list
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, "http://localhost/www.test-api.com/api/v1/news/list?page=$page&limit=$limit&keyword=$keyword");
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $responseApi = json_decode(curl_exec($ch), true);
+        curl_close($ch);
 
-        if (isset($_GET['id'])) {
-            $berhasil = $newsModel->deleteNews($_GET['id']);
-            if ($berhasil) {
-                $this->redirect("news/index", ["berhasil" => "<b>Well done!</b> News Deleted"]);
-                exit();
-            } else {
-                echo $berhasil;
-                exit();
-            }
-        }
         return $this->render(
             'index',
             [
-                'totalPages' => $listNews['totalPages'],
-                'rows' => $listNews['rows'],
+                'totalPages' => $responseApi['totalPages'],
+                'rows' => $responseApi['data'],
                 'page' => $page,
                 'limit' => $limit,
-                'search' => $search,
+                'keyword' => $keyword,
             ]
         );
     }
