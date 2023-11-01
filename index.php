@@ -37,6 +37,8 @@ if ($requestUrls[2] === '') {
         echo $newsController->update();
     } elseif ($actionExplode[0] === 'detail') {
         echo $newsController->detail();
+    } elseif ($actionExplode[0] === 'delete') {
+        echo $newsController->delete();
     }
 } elseif ($requestUrls[2] === 'category') {
     $categoryController = new CategoryController;

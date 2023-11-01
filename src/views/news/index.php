@@ -69,7 +69,7 @@
                                     <td><?php echo $row['updated_at']; ?></td>
                                     <td>
                                         <a style="background-color: #03a9f4; padding: 5px;  border: none; color: #fff; " href="<?= $baseUrl ?>/news/update?id=<?php echo $row['id']; ?>"><i class="fas fa-edit" title="Edit"></i></a>
-                                        <a style="background-color: salmon; padding: 5px;  border: none; color: #fff; " href="<?= $baseUrl ?>/news/index?id=<?php echo $row['id']; ?>" onclick="return confirm('Anda yakin ingin menghapus berita ini?')"><i class="fas fa-trash-alt" title="Delete"></i></a>
+                                        <a style="background-color: salmon; padding: 5px;  border: none; color: #fff; " href="<?= $baseUrl ?>/news/delete?id=<?php echo $row['id']; ?>" onclick="return confirm('Anda yakin ingin menghapus berita ini?')"><i class="fas fa-trash-alt" title="Delete"></i></a>
                                         <a style="background-color: cornflowerblue; padding: 5px;  border: none; color: #fff; " href="<?= $baseUrl ?>/news/detail?id=<?php echo $row['id']; ?>"><i class="fas fa-eye" title="View"></i></a>
                                     </td>
                                 </tr>
