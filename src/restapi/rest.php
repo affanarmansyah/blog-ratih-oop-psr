@@ -1,15 +1,15 @@
 <?php
 
-namespace src\rest;
+namespace src\restapi;
 
 use src\controllers\v1\NewsController;
-use src\controllers\v1\UserController;
+use src\controllers\v1\UsersController;
 
 class Rest
 {
     public function makeRoute()
     {
         $routes = new Route;
-        $routes->route(new UserController, new NewsController);
+        $routes->route(new NewsController, new UsersController);
     }
 }

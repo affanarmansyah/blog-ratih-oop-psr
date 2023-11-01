@@ -1,19 +1,19 @@
 <?php return array(
     'root' => array(
-        'name' => 'affan/blog-ratih-api',
-        'pretty_version' => 'dev-main',
-        'version' => 'dev-main',
-        'reference' => '65165589667605ae5d6677313d551de03d066b4b',
+        'name' => 'affan/test-api',
+        'pretty_version' => '1.0.0+no-version-set',
+        'version' => '1.0.0.0',
+        'reference' => NULL,
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
         'dev' => true,
     ),
     'versions' => array(
-        'affan/blog-ratih-api' => array(
-            'pretty_version' => 'dev-main',
-            'version' => 'dev-main',
-            'reference' => '65165589667605ae5d6677313d551de03d066b4b',
+        'affan/test-api' => array(
+            'pretty_version' => '1.0.0+no-version-set',
+            'version' => '1.0.0.0',
+            'reference' => NULL,
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

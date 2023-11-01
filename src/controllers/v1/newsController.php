@@ -2,127 +2,86 @@
 
 namespace src\controllers\v1; // Ubah namespace menjadi src\controllers
 
+use Exception;
 use src\controllers\component\DefaultController;
-use src\models\CategoryModel;
-use src\services\NewsModel;
-
-session_start();
+use src\models\NewsModel;
+use Throwable;
 
 class NewsController extends DefaultController
 {
-    public function __construct()
+    public function list()
     {
-        parent::__construct();
+        $model = new NewsModel();
 
-        $this->template = "news/news-template";
-    }
+        // secara default ketika tidak ada filter 
+        $newsData = $model->list(1, "", 10);
 
-    public function index()
-    {
-        $page = isset($_GET['page']) ? $_GET['page'] : 1;
-        $search = isset($_GET['cari_disini']) ? $_GET['cari_disini'] : '';
-        $limit = isset($_GET['limit']) ? $_GET['limit'] : 10;
+        // ketika ada filter yang di request
+        if (!empty($_GET)) {
+            $keyword = isset($_GET['keyword']) ? $_GET['keyword'] : "";
+            $page = isset($_GET['page']) ? $_GET['page'] : 1;
+            $limit = isset($_GET['limit']) ? $_GET['limit'] : 10;
 
-        $newsModel = new NewsModel;
-        $listNews = $newsModel->listNews($page, $search, $limit);
-
-        if (isset($_GET['id'])) {
-            $berhasil = $newsModel->deleteNews($_GET['id']);
-            if ($berhasil) {
-                $this->redirect("news/index", ["berhasil" => "<b>Well done!</b> News Deleted"]);
-                exit();
-            } else {
-                echo $berhasil;
-                exit();
-            }
+            $newsData = $model->list($page, $keyword, $limit);
         }
-        return $this->render(
-            'index',
-            [
-                'totalPages' => $listNews['totalPages'],
-                'rows' => $listNews['rows'],
-                'page' => $page,
-                'limit' => $limit,
-                'search' => $search,
-            ]
-        );
-    }
 
-    public function create()
-    {
-        $this->template = "news/create-template";
-
-        $newsModel = new NewsModel;
-        $categoryModel = new CategoryModel;
-        $listcategory = $categoryModel->listCategory(1, "", 10);
-
-        // proses addNews
-        if (isset($_POST['submit'])) {
-            if ($_POST['submit'] == "Add") {
-                $berhasil = $newsModel->createNews($_POST, $_FILES);
-                if ($berhasil) {
-                    $this->redirect("news/index", ["berhasil" => "<b>Well done!</b> News Created"]);
-                    exit();
-                } else {
-                    echo $berhasil;
-                    exit();
-                }
-            }
-        }
-        return $this->render(
-            'create',
-            [
-                'rows' => $listcategory['rows'],
-
-            ]
-        );
-    }
-
-    public function update()
-    {
-        $this->template = "news/update-template";
-
-        $newsModel = new NewsModel;
-        $categoryModel = new CategoryModel;
-        $listcategory = $categoryModel->listCategory(1, "", 10);
-
-
-        $result = $newsModel->detailUpdateNews($_GET['id']);
-
-        // proses updateNews
-        if (isset($_POST['submit'])) {
-            if ($_POST['submit'] == "Update") {
-                $berhasil = $newsModel->updateNews($_POST, $_FILES);
-                if ($berhasil) {
-                    $this->redirect("news/index", ["berhasil" => "<b>Well done!</b> News Updated"]);
-                    exit();
-                } else {
-                    echo $berhasil;
-                    exit();
-                }
-            }
-        }
-        return $this->render(
-            'update',
-            [
-                'rows' => $listcategory['rows'],
-                'result' => $result,
-            ]
-        );
+        return $newsData;
     }
 
     public function detail()
     {
-        $id = isset($_GET['id']) ? $_GET['id'] : '';
+        return ["message" => "detail"];
+    }
 
-        $newsModel = new NewsModel;
-        $detail = $newsModel->detailUpdateNews($id);
+    public function create()
+    {
+        try {
+            $model = new NewsModel();
+            if (!empty($_POST)) {
+                if (isset($_FILES['image']) && $_FILES['image']['error'] == UPLOAD_ERR_OK) {
+                    $image_name = $_FILES['image']['name'];
+                    $image_tmp_name = $_FILES['image']['tmp_name'];
+                    $upload_directory =  './assets/images/news/';
+                    $image_path = $upload_directory . $image_name;
 
-        return $this->render(
-            'detail',
-            [
-                'detail' => $detail,
-            ]
-        );
+                    move_uploaded_file($image_tmp_name, $image_path);
+                }
+
+                $data = [
+                    "title" => $_POST['title'],
+                    "image" => $image_name,
+                    "description" => $_POST['description'],
+                    "status" => $_POST['status'],
+                    "categoryId" => $_POST['categoryId'],
+                ];
+
+                $model->createNews($data);
+            }
+        } catch (Exception $e) {
+            http_response_code(400);
+            return ["message" => $e->getMessage()];
+        }
+
+        return ["message" => "Success create news"];
+    }
+
+    public function edit()
+    {
+        return ["message" => "edit"];
+    }
+
+    public function delete()
+    {
+        try {
+            $model = new NewsModel();
+            if (!empty($_GET)) {
+                $model->deleteNews($_GET['id']);
+            }
+        } catch (Exception $e) {
+            http_response_code(400);
+            return ["message" => $e->getMessage()];
+        }
+
+        return ["message" => "Success delete news"];
     }
 }

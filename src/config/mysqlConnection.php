@@ -1,6 +1,6 @@
 <?php
 
-namespace src\config\mysql;
+namespace src\config;
 
 class MysqlConnection
 {
